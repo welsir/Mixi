@@ -29,7 +29,7 @@
         </div>
         <div style="width: 70%;height: 100%;">
             <div style="height: 90%;width: 100%;overflow-y: scroll;">
-                <div style="width: 100%;height: 70px;border: none;"  v-for="(msg,index) in messageArray" :key="index">
+                <div style="width: 100%;min-height: 70px;border: none;"  v-for="(msg,index) in messageArray" :key="index">
                     <messageComponent :message="msg"></messageComponent>
                 </div>
             </div>
