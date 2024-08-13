@@ -65,7 +65,7 @@ class SocketProtocol {
                 return null
             }
             console.log(headerDataLength)
-            let str = bytes.readString(headerDataLength)
+            const str = bytes.readString(headerDataLength)
             console.log(str)
             const header = JSON.parse(str)
             this.headers.push(header)
@@ -84,9 +84,9 @@ class SocketProtocol {
         for(let i=0;i<this.headers.length;i++){
             headerLen+=1+computeVarIntSize(this.headers[i].data.length)+this.headers[i].data.length;
         }
-        var bodyLen = convertToUTF8Array(new TextEncoder().encode(this.body));
-        var messageLen = headerLen + bodyLen.length
-        var view = new DataView(new ArrayBuffer(8+this.headers.length+messageLen));
+        const bodyLen = convertToUTF8Array(new TextEncoder().encode(this.body));
+        const messageLen = headerLen + bodyLen.length
+        const view = new DataView(new ArrayBuffer(8+this.headers.length+messageLen));
         console.log(view.byteLength)
         console.log(this.headers.length)
         console.log(messageLen)
@@ -115,14 +115,14 @@ class SocketProtocol {
 }
 export { SocketProtocol };
 export type { SocketHeader };
-function printDataView(view) {
+function printDataView(view:DataView) {
     const byteArray = [];
     for (let i = 0; i < view.byteLength; i++) {
         byteArray.push(view.getInt8(i));
     }
     console.log(byteArray);
 }
-function writeByteArrayToView(bytes,view,offset){
+function writeByteArrayToView(bytes:Int8Array,view:DataView,offset:number){
     bytes.forEach((v)=>{
         offset++;
         view.setInt8(offset,v);
@@ -130,16 +130,17 @@ function writeByteArrayToView(bytes,view,offset){
     return 1+offset;
 }
 
-function convertToUTF8Array(bytes){
+function convertToUTF8Array(bytes:Uint8Array){
     const res = new Int8Array(bytes.length);
     for (let i = 0; i < bytes.length; i++) {
-        let value = bytes[i];
+        const value = bytes[i];
         // 将值调整到-128到127的范围
         res[i] = (value > 127) ? (value - 256) : value;
     }
     return res;
 }
-function writeVarInt(data,view,offset) {
+function writeVarInt(data:number,view:DataView,offset:number) {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if ((data & ~0x7F) == 0) {
             view.setInt8(offset++,data)
@@ -152,7 +153,7 @@ function writeVarInt(data,view,offset) {
     return offset;
 }
 
-function computeVarIntSize(value) {
+function computeVarIntSize(value:any) {
     let i;
     for (i = 1; i < 5; i++) {
         // 创建一个掩码，该掩码将用于检查前 i 个字节的位

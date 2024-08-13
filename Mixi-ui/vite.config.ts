@@ -24,5 +24,14 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '/mixiApi/gateway/': {
+        target: 'http://116.205.236.94:8080/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/mixiApi\/gateway/,"/")
+      },
+    }
   }
 })

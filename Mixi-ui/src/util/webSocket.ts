@@ -1,3 +1,9 @@
+/*
+ * @Author: Dhx
+ * @Date: 2024-07-22 16:05:16
+ * @Description: 
+ * @FilePath: \Mixi\Mixi-ui\src\util\webSocket.ts
+ */
 class MixiWebSocket {
     private url: string = ''
     private ws: WebSocket | undefined
@@ -49,7 +55,7 @@ class MixiWebSocket {
             this.oncloseFunc()
         };
     }
-    send(msg:ArrayBuffer) {
+    send(msg:DataView) {
         if(this.ws!.readyState == WebSocket.OPEN) {
             this.ws!.send(msg)
         }

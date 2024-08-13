@@ -69,7 +69,7 @@ const inviteFunc = () => {
     invite.value = true
 }
 const quitRoom = () => {
-    quitApi().then((res:any)=>{
+    quitApi('').then((res:any)=>{
 
     })
 }
@@ -92,7 +92,7 @@ const sendMessage = () => {
 }
 const messageArray = ref<any[]>([])
 const messageContent = ref('')
-const socket = new MixiWebSocket('ws://localhost:8090/chat')
+const socket = new MixiWebSocket('ws://123.249.107.238:8090/chat')
 socket.onopen(() => {
     storage.set('uid',uid)
     socket.send(joinRoomMessage({roomId:123,uid:uid}))
