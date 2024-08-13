@@ -28,7 +28,7 @@
             </div>
         </div>
         <div style="width: 70%;height: 100%;">
-            <div style="height: 90%;width: 100%;overflow-y: scroll;">
+            <div style="height: 90%;width: 100%;overflow-y: scroll;" ref="chatScrollBox">
                 <div style="width: 100%;min-height: 70px;border: none;"  v-for="(msg,index) in messageArray" :key="index">
                     <messageComponent :message="msg"></messageComponent>
                 </div>
@@ -51,6 +51,7 @@ import { storage } from '@/util/storage';
 import messageComponent from '@/components/room/messageComponent.vue';
 let invite = ref(false)
 let inviteEmail = ref<String[]>([])
+let chatScrollBox = ref<any>()
 onMounted(() => {
     for (let i = 0; i < 20; i++)inviteEmail.value[i] = ''
 })
@@ -109,6 +110,9 @@ socket.onmessage((event: any) => {
         messageArray.value.push(msg)
         console.log(messageArray.value)
     })
+    setTimeout(()=>{
+        chatScrollBox.value.scrollTop = chatScrollBox.value.scrollHeight;
+    },100)
 })
 socket.init()
 
