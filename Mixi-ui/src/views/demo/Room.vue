@@ -69,9 +69,6 @@ const inviteFunc = () => {
     invite.value = true
 }
 const quitRoom = () => {
-    quitApi().then((res:any)=>{
-
-    })
 }
 const share = () => {
     shareApi().then((res: any) => {
@@ -95,10 +92,10 @@ const messageContent = ref('')
 const socket = new MixiWebSocket('ws://localhost:8090/chat')
 socket.onopen(() => {
     storage.set('uid',uid)
-    socket.send(joinRoomMessage({roomId:123,uid:uid}))
-    setInterval(()=>{
+    socket.send(joinRoomMessage({roomId: 123, uid: uid}))
+  setInterval(()=>{
         socket.send(heartBeatMessage())
-    },5000)
+  },5000)
 })
 socket.onmessage((event: any) => {
     let data:Blob = event.data

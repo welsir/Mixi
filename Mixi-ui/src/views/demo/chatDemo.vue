@@ -17,6 +17,6 @@ webSocket.onmessage((event)=>{
     console.log(event.data)
 })
 webSocket.onopen(()=>{
-    webSocket.send('hello')
+
 })
 </script>

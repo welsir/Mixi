@@ -115,22 +115,22 @@ class SocketProtocol {
 }
 export { SocketProtocol };
 export type { SocketHeader };
-function printDataView(view) {
+function printDataView(view:any) {
     const byteArray = [];
     for (let i = 0; i < view.byteLength; i++) {
         byteArray.push(view.getInt8(i));
     }
     console.log(byteArray);
 }
-function writeByteArrayToView(bytes,view,offset){
-    bytes.forEach((v)=>{
+function writeByteArrayToView(bytes:any,view:any,offset:number){
+    bytes.forEach((v:any)=>{
         offset++;
         view.setInt8(offset,v);
     })
     return 1+offset;
 }
 
-function convertToUTF8Array(bytes){
+function convertToUTF8Array(bytes:any){
     const res = new Int8Array(bytes.length);
     for (let i = 0; i < bytes.length; i++) {
         let value = bytes[i];
@@ -139,7 +139,7 @@ function convertToUTF8Array(bytes){
     }
     return res;
 }
-function writeVarInt(data,view,offset) {
+function writeVarInt(data:number,view:any,offset:number) {
     while (true) {
         if ((data & ~0x7F) == 0) {
             view.setInt8(offset++,data)
@@ -152,7 +152,7 @@ function writeVarInt(data,view,offset) {
     return offset;
 }
 
-function computeVarIntSize(value) {
+function computeVarIntSize(value:number) {
     let i;
     for (i = 1; i < 5; i++) {
         // 创建一个掩码，该掩码将用于检查前 i 个字节的位

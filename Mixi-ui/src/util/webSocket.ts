@@ -49,7 +49,8 @@ class MixiWebSocket {
             this.oncloseFunc()
         };
     }
-    send(msg:ArrayBuffer) {
+
+    send(msg: DataView) {
         if(this.ws!.readyState == WebSocket.OPEN) {
             this.ws!.send(msg)
         }
