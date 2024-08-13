@@ -87,6 +87,7 @@ const share = () => {
 }
 const uid = Math.ceil(Math.random()*100000)
 const sendMessage = () => {
+    if(messageContent.value == '')return
     socket.send(chatMessage({roomId:123,uid:uid,content:messageContent.value}))
     messageContent.value = ''
 }

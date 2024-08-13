@@ -53,7 +53,7 @@ onMounted(()=>{
 
 .message-box__right{
     position: relative;
-    width: calc(100% - 30px);
+    max-width: calc(100% - 30px);
 }
 
 .message-box__right__content{
