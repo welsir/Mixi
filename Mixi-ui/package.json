@@ -13,7 +13,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.4.2",
     "axios": "^1.7.2",
+    "naive-ui": "^2.39.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persist": "^1.0.0",
     "unplugin-vue-router": "^0.10.0",

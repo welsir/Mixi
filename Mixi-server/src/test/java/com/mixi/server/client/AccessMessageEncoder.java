@@ -39,7 +39,7 @@ public class AccessMessageEncoder {
         byte[] body = headerCmd==12?stringToBytes("{" +
                 "\"roomId\": 123," +
                 "\"fromUid\":"+ uid + "," +
-                "\"content\": \""+ msg + "\"" +
+                "\"content\": \"" + msg + "\"" +
                 "}"):new byte[]{};
         int totalLength = 0;
         for (Header header : headers) {

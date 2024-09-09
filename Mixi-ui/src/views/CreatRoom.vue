@@ -29,9 +29,10 @@ function filterChosenItems() {
 }
 
 let parameter = ref<Parameter>({
-  anonymityFlag: false, limit: 30, roomName: "111"
+  anonymityFlag: false, limit: 30, roomName: ""
 })
 const createRoom = () => {
+
   createApi(parameter.value).then((res:any)=>{
     if(res.code == 200) {
       joinApi(res.data.link).then((res:any)=>{
@@ -187,7 +188,7 @@ const createRoom = () => {
                   </g>
                 </g>
               </svg>
-              <h5>允许匿名用户进入</h5>
+              <h5>允许游客进入</h5>
             </li>
           </ul>
           <button @click="createRoom()" class="M-btn">+创建房间</button>

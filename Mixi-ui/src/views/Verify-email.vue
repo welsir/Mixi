@@ -1,12 +1,12 @@
 <!--
  * @Author: Dhx
  * @Date: 2024-07-24 11:11:16
- * @Description: 
+ * @Description:
  * @FilePath: \Mixi\Mixi-ui\src\views\Verify-email.vue
 -->
 <template>
     <div style="width: 100vw;height: 100vh;line-height: 100vh;font-size: 32px;text-align: center;">
-        <span v-if="time!=0">登录成功! {{ time }} 秒后跳转到首页。</span>
+        <span v-if="time!=0">验证成功! {{ time }} 秒后跳转到首页。</span>
     </div>
 </template>
 <script lang="ts" setup>
@@ -35,7 +35,7 @@ onMounted(()=>{
             let interval  = setInterval(()=>{
                 if(time.value == 0){
                     clearInterval(interval)
-                    router.push('/')
+                    router.push('/HomeView')
                 }
                 time.value--
             },1000)

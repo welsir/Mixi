@@ -56,11 +56,7 @@ public class MessageCodec {
     }
 
     public static AccessMessage decode(ByteBuf buf) {
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.getBytes(buf.readerIndex(),bytes);
-        log.info(Arrays.toString(bytes));
         AccessMessage msg = new AccessMessage();
-        buf.readByte();
         try {
             msg.setVersion(buf.readByte());
             msg.setHeartBeat(buf.readBoolean());
@@ -75,14 +71,11 @@ public class MessageCodec {
             for (int i = 0; i < headerCount; i++) {
                 int headerLength = VarInt.readVarInt32(buf);
                 int headerType = buf.readByte();
-                buf.readByte();
                 Header header = new Header(headerType, BytesUtils.getFromBuf(buf, headerLength));
                 headers.add(header);
                 totalLength-=header.calculateTotalLength();
             }
-
             msg.setHeaders(headers);
-            buf.readByte();
             byte[] body = BytesUtils.getFromBuf(buf, totalLength);
             msg.setBody(body);
         }catch (Exception e){

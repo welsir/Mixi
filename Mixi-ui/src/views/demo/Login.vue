@@ -1,44 +1,56 @@
 <!--
  * @Author: Dhx
  * @Date: 2024-07-22 16:49:56
- * @Description: 
+ * @Description:
  * @FilePath: \Mixi\Mixi-ui\src\views\demo\Login.vue
 -->
 <template>
-    <div style="height: 100vh;width:100vw;position: relative;">
-        <div
-            style="height: 50%;width: 50%;position: relative;top: 50%;left: 50%;transform: translate(-50%,-50%);padding: 20px;display: flex;">
-            <div style="width: 300px;height: 100%;">
-                <div class="btn" :style="{ backgroundColor: loginMethod == 0 ? 'rgba(230,230,230)' : 'white' }"
-                    @click="loginMethod = 0">
-                    邮箱登录
-                </div>
-                <div class="btn" :style="{ backgroundColor: loginMethod == 1 ? 'rgba(230,230,230)' : 'white' }"
-                    @click="loginMethod = 1">
-                    游客登陆
-                </div>
-            </div>
-            <div>
-                <div v-if="loginMethod == 0">
-                    <label>邮箱</label><input style="width: 200px;" v-model="loginForm.email">
-                </div>
-                <div>
-                    <label>验证码</label><input style="width: 100px;" v-model="loginForm.picCode">
-                    <VerifyCode :getPicId="getPicId" :picWidth="100" :picHeight="50"></VerifyCode>
-                </div>
-                <div>
-                    <button @click="loginFunc">登录/注册</button>
-                </div>
-            </div>
+  <div class="upper" >
+    <div class="login-div" style="height: 70vh;width:100vw;position: relative;">
+      <form class="login" style="text-align: center;">
+        <h1>Mixi</h1>
+        <div class="input-text">
+          <input type="text" id="inputEmail" name="email" placeholder="Email" v-model="loginForm.email"/>
+          <div class="warning-input" id="warningEmail">
+            Please enter a valid email or phone number.
+          </div>
         </div>
+
+        <div class="input-text">
+          <div class="input-group">
+            <input type="password" id="inputPassword" name="Code" placeholder="Code" v-model="loginForm.picCode"/>
+            <verify :getPicId="getPicId"></verify>
+          </div>
+          <div class="warning-input" id="warningPassword">
+            Your password must contain between 4 and 60 characters.
+          </div>
+        </div>
+
+        <div>
+          <button class="signin-button" @click="loginFunc">登录</button>
+        </div>
+        <div class="remember-flex">
+          <div>
+          </div>
+          <div class="help">
+            <a class="color_text" href="#">跳转注册</a>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { LinkLoginForm, VisitorLoginForm } from "@/api/user/userType";
 import { linkLoginApi, visitorLoginApi } from '@/api/user/userApi';
-import VerifyCode from '@/components/common/VerifyCode.vue';
 import { storage } from '@/util/storage';
+import verify from "@/components/common/VerifyCode.vue";
+
+import '../../assets/css/additional.css';
+import '../../assets/css/normalize.css';
+import '../../assets/css/style.css';
+
 let loginMethod = ref(0)
 let loginForm = ref<LinkLoginForm>({
     email: '',
@@ -53,11 +65,15 @@ let visitorLoginForm = ref<VisitorLoginForm>({
 const getPicId = (picId: string) => {
     loginForm.value.picId = picId
 }
-const loginFunc = () => {
+const loginFunc = (event) => {
+    event.preventDefault();
+
     if (loginMethod.value == 0) {
         linkLoginApi(loginForm.value).then((res: any) => {
             if (res.code == 200) {
-                console.log('success')
+                alert('success')
+            }else{
+              console.log('request fail:'+res.message)
             }
         }, (res: any) => {
             console.log(res.message)
@@ -74,6 +90,50 @@ const loginFunc = () => {
 }
 </script>
 <style scoped>
+.footer {
+  display: flex;
+  justify-content: center; /* 居中对齐水平内容 */
+  align-items: center; /* 居中对齐垂直内容 */
+  padding: 10px; /* 可选：设置内边距 */
+  background-color: #f8f9fa; /* 可选：设置背景色 */
+  border-top: 1px solid #eaeaea; /* 可选：设置顶部边框 */
+}
+
+.author {
+  font-size: 14px; /* 可选：设置字体大小 */
+}
+
+.author a {
+  color: #007bff; /* 可选：设置链接颜色 */
+  text-decoration: none; /* 可选：去掉下划线 */
+}
+
+.author a:hover {
+  text-decoration: underline; /* 可选：设置链接悬停效果 */
+}
+.input-group {
+  display: flex;
+  align-items: center; /* 垂直对齐 */
+}
+
+.input-group input {
+  width: 50%;
+  margin-right: 50px;
+}
+
+verify {
+  margin-left: 10px; /* 与输入框之间的间距 */
+}
+
+.input-text {
+  width: 100%; /* 确保整个组件适应容器宽度 */
+}
+
+.warning-input {
+  margin-top: 5px;
+  color: red;
+  font-size: 12px;
+}
 input {
     height: 50px;
     outline: none;

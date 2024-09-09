@@ -44,7 +44,18 @@ function chatMessage(msg:{roomId:number,uid:number,content:string}) {
     })
     return new SocketProtocol(VERSION_1,false,CMD_1,[header],body).encodeMessage()!
 }
+
+function queryHistoryMessage(msg:{roomId:number}){
+    const header:SocketHeader = {
+        type: HEADER_TYPE_CHATROOM,
+        data: JSON.stringify({
+            room:msg.roomId,
+            cmd:HEADER_CMD_MESSAGE.toString()
+        })
+    }
+    return new SocketProtocol(VERSION_1,false,CMD_1,[],"").encodeMessage();
+}
 function decodeRemoteMessage(bytes:Bytes){
     return new SocketProtocol(VERSION_1,false,CMD_1,[],"").decodeMessage(bytes)
 }
-export {heartBeatMessage,joinRoomMessage,chatMessage,decodeRemoteMessage}
+export {heartBeatMessage,joinRoomMessage,chatMessage,decodeRemoteMessage,queryHistoryMessage}

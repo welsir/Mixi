@@ -3,7 +3,7 @@ import { useSnackbarStore } from "@/stores/snackbarStore";
 import { statusTextMap,errorStatusCodes,ignoreStatusCodes } from '@/util/statusCodes'
 import { storage } from "./storage";
 const request = axios.create({
-  baseURL: "/mixiApi/gateway",
+  baseURL: "http://116.205.236.94:8080",
   // baseURL: "/api",
   timeout: 10000,
 });

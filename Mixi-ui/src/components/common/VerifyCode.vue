@@ -23,15 +23,18 @@ let props = defineProps({
 })
 let imgUrl = ref('')
 let counter = 0
+const emit = defineEmits(['picId']);
 const getVerifyCode = () => {
     if(counter>5){
         console.log('请勿频繁操作')
     } // 防止频繁获取验证码
     counter++
     getVerifyCodeApi().then((res:any)=>{
+      console.log(res)
         if(res.code == 200) {
             imgUrl.value = res.data.base64
             props.getPicId!(res.data.picId)
+            emit('picId', res.data.picId);
         }
     })
 }

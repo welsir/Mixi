@@ -87,12 +87,7 @@ class SocketProtocol {
         var bodyLen = convertToUTF8Array(new TextEncoder().encode(this.body));
         var messageLen = headerLen + bodyLen.length
         var view = new DataView(new ArrayBuffer(8+this.headers.length+messageLen));
-        console.log(view.byteLength)
-        console.log(this.headers.length)
-        console.log(messageLen)
-        console.log(headerLen)
-        console.log(bodyLen.length)
-        let offset = 1;
+        let offset = 0;
         view.setInt8(offset++,VERSION_1);
         view.setInt8(offset++,this.isHeartBeat?1:0);
         view.setInt8(offset++,this.command);
@@ -124,10 +119,10 @@ function printDataView(view:any) {
 }
 function writeByteArrayToView(bytes:any,view:any,offset:number){
     bytes.forEach((v:any)=>{
-        offset++;
         view.setInt8(offset,v);
+        offset++;
     })
-    return 1+offset;
+    return offset;
 }
 
 function convertToUTF8Array(bytes:any){

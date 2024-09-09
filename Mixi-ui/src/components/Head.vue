@@ -1,7 +1,7 @@
 <!--
  * @Author: Dhx
  * @Date: 2024-07-22 16:05:16
- * @Description: 
+ * @Description:
  * @FilePath: \Mixi\Mixi-ui\src\components\Head.vue
 -->
 <script setup lang="ts">
@@ -20,7 +20,7 @@ import UserStatus from '@/components/user/UserStatus.vue'
       <nav class="flex" @click="router.push('/about')">关于我们</nav>
       <nav class="flex">
         <button @click="router.push('/demo/Login')" v-if="!useAuthStore().getLoginState" class="M-btn">登录/注册</button>
-        <!-- <button @click="useAuthStore().setLoggedIn" v-if="!useAuthStore().isLoggedIn" class="M-btn">登录/注册</button> -->
+
         <UserStatus v-else></UserStatus>
       </nav>
     </div>
@@ -56,7 +56,8 @@ header {
     height: 100%;
 
     nav {
-      position: relative;
+      top: 0;
+      position: sticky;
       padding: 20px;
       height: 100%;
 

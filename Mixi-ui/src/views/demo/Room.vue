@@ -6,6 +6,7 @@
 -->
 <template>
     <div style="width: 100%;height: 90vh;display: flex;padding: 70px 0px;">
+
         <div style="width: 20%;height: 100%;">
             <div style="height: 10%;width: 100%;display: flex;justify-content: space-around;background-color: rgba(20,20,20);">
                 <button @click="inviteFunc">邀请好友</button>

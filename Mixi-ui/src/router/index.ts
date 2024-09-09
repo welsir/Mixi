@@ -7,12 +7,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 import HomeView from "@/views/HomeView.vue";
+import CreatRoom from "@/views/CreatRoom.vue";
 
 const customRoutes = [
   {
     path: '/',
     name: 'Home',
     component: HomeView
+  },{
+    path: '/CreatRoom',
+    name: 'createRoom',
+    Component: CreatRoom
   }
 ];
 
@@ -23,6 +28,6 @@ const router = createRouter({
   routes: allRoutes,
 });
 if (import.meta.hot)  {
-  handleHotUpdate(router) 
+  handleHotUpdate(router)
 }
 export default router
