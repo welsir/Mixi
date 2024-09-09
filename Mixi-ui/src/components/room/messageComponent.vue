@@ -3,15 +3,14 @@
         <span style="color: skyblue;text-decoration: underline;">{{ headers[0].uid }}</span> 加入房间
     </div>
     <div class="message-box" :style="{flexDirection:currentUser?'row-reverse':'row'}" v-else-if="body">
-        <div clas="message-box__left">
+        <div class="message-box__left">
             <div style="height: 40px;width:40px;border-radius: 20px;background-image: url('/favicon.ico');background-repeat: no-repeat;background-position: center center;"></div>
         </div>
-        <div clas="message-box__right">
+        <div class="message-box__right">
             <div class="message-box__right__content">
                 <div class="content" :style="{backgroundColor:currentUser?'rgba(174,221,255)':'rgba(240,240,245)'}" >
                     <div>{{ body.content }}</div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -41,27 +40,35 @@ onMounted(()=>{
     border: none;
 }
 .message-box{
+    position: relative;
     width: calc(100% - 40px);
     padding: 20px;
     display: flex;
-    min-height: 100%;
 }
 
 .message-box__left{
+    position: relative;
     width: 30px;
 }
 
 .message-box__right{
-    width: calc(100% - 30px);
+    position: relative;
+    max-width: calc(100% - 30px);
 }
 
 .message-box__right__content{
-    width: 100%;
+    position: relative;
 }
 
 .content {
+    position: relative;
+
     margin: 0 10px;
     padding: 10px;
+    overflow: hidden;
     border-radius: 10px;
+    overflow-wrap: break-word;
+    word-wrap:break-word;
+    word-break:normal; 
 }
 </style>
