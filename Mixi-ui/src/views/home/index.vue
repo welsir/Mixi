@@ -2,7 +2,7 @@
   <div class="chatHome">
     <div class="chatLeft">
       <div class="title">
-        <h1 style="font-size: 30px;">Mixi聊天室</h1>
+        <h1 style="font-size: 30px;">{{roomName}}的房间</h1>
       </div>
       <div class="online-person">
         <span class="onlin-text">房间成员</span>
@@ -21,32 +21,26 @@
       </div>
     </div>
     <div class="chatRight">
-      <div >
+      <div>
         <ChatWindow
-            :roomId="someRoomId"
-            :uid="someUid"
-        ></ChatWindow>
+            :roomId=roomId
+            :uid=uid
+            :members="personList">
+        </ChatWindow>
       </div>
-
     </div>
     <!-- <el-col :span="4"><div class="grid-content bg-purple"></div></el-col> -->
   </div>
 </template>
 
-<script>
-import PersonCard from "../components/room/PersonCard.vue";
-import ChatWindow from "../components/room/chatwindow.vue";
+<script lang="ts">
+import PersonCard from "../../components/room/PersonCard.vue";
+import ChatWindow from "../../components/room/chatwindow.vue";
+import {chatStore} from "@/store/chatStore";
+import {decodeRemoteMessage, heartBeatMessage, joinRoomMessage, queryOnlineMembers} from "@/util/socketMessage";
+import Bytes from "@/util/byteUtil";
+
 export default {
-  props:{
-    roomId:{
-      type:String,
-      require:true,
-    },
-    uid: {
-      type: String,
-      required: true,
-    },
-  },
   name: "App",
   components: {
     PersonCard,
@@ -61,34 +55,29 @@ export default {
           name: "genius",
           detail: "Genius大傻逼",
           lastMsg: "to do",
-          id: "1002",
+          id: "1234",
           headImg: "../../public/img/head_portrait1.jpg",
-
         },
         {
           img: "",
           name: "伍老板",
           detail: "INTP",
           lastMsg: "dada dw ertgthy j uy",
-          id: "1003",
+          id: "123",
           headImg: "../../public/img/head_portrait2.jpg",
-
         },
         {
           img: "",
           name: "唐文杰",
           detail: "唐文杰666",
           lastMsg: "大萨达萨达所大大萨达",
-          id: "1004",
+          id: "12",
           headImg: "../../public/img/head_portrait3.jpg",
-
         },
       ],
       showChatWindow: false,
       chatWindowInfo: {},
     };
-  },
-  mounted() {
   },
   methods: {
     clickPerson(info) {
@@ -111,7 +100,35 @@ export default {
         this.personList.unshift(nowPersonInfo);
       }
     },
+
   },
+  mounted() {
+    const store = chatStore();
+    const ws = store.createWsIfAbsent();
+    ws.init();
+    ws.send(joinRoomMessage({roomId: this.roomId, uid: this.uid}))
+    ws.send(queryOnlineMembers({roomId:this.roomId}));
+    ws.onmessage((event: any) => {
+      let data: Blob = event.data;
+      data.text().then((res: any) => {
+        let msg: any = decodeRemoteMessage(new Bytes(res));
+        console.log(msg)
+        if(msg.headers.length!=0&&msg.headers[0].cmd==0x0e){
+          this.personList = msg.headers[0].members
+        }
+      });
+    });
+  },
+  setup(){
+    const roomName = chatStore().roomName;
+    const uid = chatStore().uid;
+    const roomId = chatStore().roomId;
+    return {
+      roomName,
+      uid,
+      roomId
+    }
+  }
 };
 </script>
 
@@ -126,7 +143,7 @@ export default {
       padding-left: 10px;
     }
     .online-person {
-      margin-top: 100px;
+      margin-top: 65px;
       .onlin-text {
         padding-left: 10px;
         color: rgb(176, 178, 189);

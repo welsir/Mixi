@@ -1,52 +1,98 @@
-<!--
- * @Author: LisianthusLeaf
- * @Date: 2024-06-24 10:25:41
- * @LastEditors: LisianthusLeaf
- * @LastEditTime: 2024-07-08 15:21:43
- * @FilePath: \Mi\Mixi-ui\src\views\HomeView.vue
- * @Description:
- * WX:baiyao0211
- * Copyright (c) 2024 by LisianthusLeaf, All Rights Reserved.
--->
-<script setup lang="ts">
-import { ref } from 'vue'
-import router from "@/router";
+<script lang="ts">
+import {defineComponent, ref} from 'vue'
+import { provide } from 'vue';
 import Head from "@/components/Head.vue";
-let members = ref([
-  { name: 'Genius', slogan: 'Genius', description: 'genius大天才', avatar: 'http://geniusay.com/assets/Genius2-1096d28d.jpg' },
-  { name: 'Weisir', slogan: 'Weisir', description: '既生welsir，何生genius', avatar: 'https://www.welsir.com/img/icon/logo.JPG' },
-  { name: 'Dragon King', slogan: 'Dragon King', description: '坚果云大Boss', avatar: 'https://www.dracoum.com/assets/images/AxeDragon180.png' },
-  { name: '项梦缘', slogan: '', description: '', avatar: '' },
-  { name: '唐文杰', slogan: '', description: '', avatar: '' },
-  { name: '李小春', slogan: '', description: '', avatar: '' },
-  { name: '蒋权', slogan: '', description: '', avatar: '' },
-  { name: '邓鸿翔', slogan: '', description: '', avatar: '' },
-  { name: '郑庹村', slogan: '', description: '', avatar: '' }
-])
+import { defineStore } from 'pinia';
+import {Parameter} from "@/api/room/roomType";
+import {createApi, joinApi} from "@/api/room/roomApi";
+import router from "@/router";
 
-const images = import.meta.glob('../../public/img/members/*.(png|jpg|svg)');
-const backgroundImages = Object.keys(images);
-const join = ref(false)
-let RoomId = ref()
+export const chatStore = defineStore('chat', {
+  state: () => ({
+    roomName: '',
+    uid: '',
+    roomId: 0,
+  }),
+  actions: {
+    setChatDetails(roomName: string, number: number, uid: string) {
+      this.roomName = roomName;
+      this.uid = uid;
+      this.roomId = number;
+    },
+  },
+});
+export default defineComponent({
+  setup() {
+    const parameter = ref<Parameter>({
+      anonymityFlag: false,
+      limit: 24,
+      roomName: ""
+    });
+    const join = ref(false);
+    const create = ref(false);
+    const roomNumber = ref('');
+    let RoomId = ref()
 
-const joinRoom =()=>{
-  join.value = true;
-}
-const isActive = ref(false);
-const toggleAnimation = () => {
-  isActive.value = !isActive.value;
-  showBackground.value = false;
-  setTimeout(() => {
-    showImages.value = true;
-  }, 500);
-};
-const showBackground = ref(true);
-const showImages = ref(false);
-const currentIndex= ref(0);
-function changeBackgroundImage() {
-  // 每次动画结束后更改背景图索引
-  currentIndex.value = (currentIndex.value + 1) % backgroundImages.length;
-}
+    const joinButton =()=>{
+      join.value = true;
+    }
+    const createButton =()=>{
+      create.value=true;
+    }
+    const data = [
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+      { avatar: '', name: 'Genius' },
+    ]
+    const history = ref()
+    history.value = data.map(item => ({
+      ...item, // 展开原始对象
+      isChoose: false, // 添加isChoose属性并设置为false
+    }));
+// 筛选已选项
+    function filterChosenItems() {
+      return history.value.filter((item: any) => item.isChoose === true);
+    }
+    const createRoom = () => {
+      console.log(parameter.value)
+      createApi(parameter.value).then((res:any)=>{
+        if(res.code == 200) {
+          joinApi(res.data.link).then((res:any)=>{
+            if(res.code == 200) {
+              console.log(res.data)
+            }
+          })
+        }})
+      // const randomNumber = Math.floor(Math.random() * 1e16);
+      // const paddedNumber = String(randomNumber).padStart(16, '0');
+      // roomNumber.value = paddedNumber.replace(/(.{4})/g, '$1-').slice(0, -1);
+      // chatStore().setChatDetails(parameter.value.roomName,Math.floor(Math.random() * 1e6),roomNumber.value);
+      // router.push({name: 'chat',});
+    }
+
+    const jointRoom = () =>{
+
+    }
+
+    return {
+      parameter,
+      joinButton,
+      jointRoom,
+      createButton,
+      createRoom,
+      join,
+      create,
+      RoomId,
+    };
+  }
+});
 </script>
 
 <template>
@@ -57,8 +103,8 @@ function changeBackgroundImage() {
         <h1>Mixi</h1>
         <p>便捷实时通讯网站</p>
         <div>
-          <button @click="joinRoom" class="join-btn">加入房间</button>
-          <button class="M-btn" style="width: 100px; height: 40px;margin-left:15px">+创建房间</button>
+          <button @click="joinButton" class="join-btn">加入房间</button>
+          <button @click="createButton" class="M-btn" style="width: 100px; height: 40px;margin-left:15px">+创建房间</button>
         </div>
       </div>
       <div v-show="join" class="join-room">
@@ -67,80 +113,36 @@ function changeBackgroundImage() {
         <label style="margin-top: 10px"><input type="checkbox">同意我们的《用户协议》和《隐私计划》</label>
         <div style="margin-top:25px">
           <input v-model="RoomId" placeholder="请输入房间号" class="M-input">
-          <button class="M-btn" style="width:60px;height:40px;margin-left:20px">加入</button>
+          <button class="M-btn" style="width:60px;height:40px;margin-left:20px" @click="jointRoom">加入</button>
         </div>
       </div>
-    </div>
-    <div class="team">
-      <div class="card-container">
-        <div
-            class="card imageCoverFull"
-            :key="currentIndex"
-            :style="{ backgroundImage: `url(${backgroundImages[currentIndex.valueOf()]})` }"
-            @animationiteration="changeBackgroundImage"
-            @click="toggleAnimation"
-        >
-          <img :src="members[currentIndex.valueOf()].avatar" alt="avatar" class="memberImg"/>
-        </div>
-      </div>
-      <div v-if="showImages" class="members" :class="{ active: isActive }">
-        <div
-          v-for="(item, index) in members"
-          :key="index"
-          class="M-card imageCoverFull"
-          :style="{'--i':-4+index, 'background-image': `url(${backgroundImages[index]})`}"
-          @click="handleMouseOver(item)"
-        >
-          <img :src="item.avatar" alt="avatar" />
+      <div v-show="create" class="create-room">
+        <div class="main flex">
+          <div class="create flex">
+            <div class="create-card">
+              <!--房间参数设置-->
+              <div class="parameter flex">
+                <ul>
+                  <li>
+                    <h5>房间名</h5>
+                    <input v-model="parameter.roomName">
+                  </li>
+                  <li>
+                    <h5>人数限制</h5>
+                    <input v-model="parameter.limit">
+                  </li>
+                </ul>
+                <button @click="createRoom()" class="M-btn">+创建房间</button>
+              </div>
+              <div @click="create = false" class="close">X</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
-/* 父容器，包含3D效果 */
-.card-container {
-  perspective: 800px; /* 设置3D效果的视角深度 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30vh;
-  /* 卡片的基本样式 */
-  .card {
-    width: 160px;
-    height: 240px;
-    background-image: url("../../public/img/membersEnter.png");
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transform: rotate(45deg);
-    animation: rotateCard 5s infinite linear;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .card .memberImg{
-    position: relative;
-    margin-bottom: 140px;
-  }
-}
-/* 定义3D旋转的动画 */
-@keyframes rotateCard {
-  0% {
-    transform: rotate(30deg); /* 保持初始倾斜30度 */
-    opacity: 0; /* 初始状态，完全透明 */
-  }
-  20% {
-    opacity: 1; /* 在旋转的20%时完全显示 */
-  }
-  80% {
-    opacity: 1; /* 在接近结束前一直保持完全显示 */
-  }
-  100% {
-    transform: rotate(30deg) rotateY(360deg); /* 360度绕Y轴旋转，并保持30度倾斜 */
-    opacity: 0; /* 结束时再次透明 */
-  }
-}
-
 h1{
   content: 'Mixi';
   position: relative;
@@ -209,79 +211,118 @@ h1::after{
       cursor: pointer;
     }
   }
-}
-.team {
-  width: 90%;
-  background-color: white;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-
-  .members{
-    position: relative;
-    display: flex;
-    flex-direction: row; /* 横向排列 */
-    flex-wrap: wrap; /* 如果元素太多，超过容器宽度时换行 */
-    margin-left: 1000px;
-    margin-top: 100px;
-  }
-  img {
-    margin-top: 145px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    background-color: white;
-  }
-  .M-card {
-    position: absolute;
-    width: 240px;
-    height: 360px;
-    border-radius: 8px;
+  .create-room{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
-    align-content: center;
-    color: black;
-    font-weight: 700;
-    border: 10px solid rgba(0,0,0,.1);
-    transition: .5s;
-    transform-origin: 50% 100%;
-    opacity: 0;
-    margin-left: 140px;
+    align-items: center;
+    z-index: 1000;
+    .create {
+      position: relative;
+      width: 40%;
+      height: 100%;
+      background-color: #efefef;
 
-    h5 {
-      display: flex;
-      align-items: center;
-      grid-column-start: 1;
-      grid-column-end: 3;
+      .create-card {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: #d7d7d7 0 0 5px;
+        display: flex;
+        .close{
+          position: absolute;
+          width:50px;
+          height:50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: white;
+          top:0;
+          left:calc(100% - 50px);
+          cursor: pointer;
+        }
+      }
     }
-  }
-  .members.active .M-card {
-    transform: rotate(calc(var(--i) * 5deg))
-                translate(calc(var(--i) * 120px), -50px);
-    box-shadow: 0 15px 50px rgba(0,0,0, .1);
-    cursor: pointer;
-    opacity: 1; /* 显示卡片 */
-    z-index: 1; /* 卡片展示 */
-  }
 
-  .members.active .M-card:hover{
-    translate: calc(var(--i) * 20px) -50px;
-    z-index: 999;
-  }
+    .history {
+      min-width: 200px;
+      width: 30%;
+      padding: 30px 0px 30px 30px;
 
-  .imageCoverFull{
-    background-size: cover;
-    background-position: center;
-  }
-  h5{
-    margin-left: 1090px;
-  }
-  p {
-    color: black;
-    margin-top: 5px;
-    margin-bottom: 30px;
+      h5 {
+        font-weight: normal;
+        font-size: 25px;
+        padding-bottom: 10px;
+        border-right: solid #d7d7d7 1px;
+      }
+
+      ul {
+        border-right: solid #d7d7d7 1px;
+        list-style: none;
+        padding-left: 0;
+        overflow-y: scroll;
+        height: 90%;
+
+        li {
+          display: grid;
+          align-items: center;
+          grid-template-columns: 60px auto 50px;
+          line-height: 55px;
+
+          img {
+            width: 40px;
+            height: 40px;
+            background-color: #e1beef;
+            border-radius: 50px;
+          }
+
+          input {
+            position: relative;
+            float: right;
+          }
+        }
+      }
+
+      ul::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+      }
+    }
+
+    .parameter {
+      flex: 1;
+      flex-direction: column;
+
+      button {
+        margin-top: 50px;
+        width: 300px;
+        height: 50px;
+      }
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+        width: 300px;
+
+        li {
+          display: grid;
+          align-items: center;
+          grid-template-columns: 100px auto;
+          line-height: 60px;
+
+          input {
+            height: 40px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
   }
 }
 </style>

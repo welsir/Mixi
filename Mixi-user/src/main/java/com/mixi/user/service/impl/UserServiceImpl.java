@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
      * @return 游客用户登录token
      */
     @Override
-    public R<String> visitorUserLogin(TouristLoginDTO loginDTO) {
+    public Result<?> visitorUserLogin(TouristLoginDTO loginDTO) {
 
         // 验证验证码是否正确
         ((PicCodeVerifyChain) chainFactory.getChain("picCodeVerify")).filter(new String[]{loginDTO.getPicId(), loginDTO.getPicCode()});
@@ -266,7 +266,7 @@ public class UserServiceImpl implements UserService {
         log.info("游客用户:{}登录成功", user.getNickname());
 
         // 返回游客token
-        return R.success(ThreadContext.getData("token").toString());
+        return Result.success(Map.of("token",ThreadContext.getData("token").toString(),"uid",UUID.randomUUID().toString()));
     }
 
     /**

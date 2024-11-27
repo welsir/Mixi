@@ -57,7 +57,7 @@ public class UserController {
 
     @ApiAuth(NOT)
     @PostMapping("/visit/login")
-    public R<String> visitorUserLogin(@RequestBody  @Valid TouristLoginDTO touristLoginDTO) {
+    public Result<?> visitorUserLogin(@RequestBody  @Valid TouristLoginDTO touristLoginDTO) {
         return userService.visitorUserLogin(touristLoginDTO);
     }
 }

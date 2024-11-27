@@ -1,7 +1,11 @@
 package com.mixi.webroom.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.client.naming.NacosNamingService;
 import com.mixi.common.exception.ServeException;
 import com.mixi.common.utils.RCode;
 import com.mixi.common.utils.UserThread;
@@ -22,9 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.mixi.webroom.constants.RedisKeyConstants.*;
 
@@ -56,6 +62,13 @@ public class WebRoomServiceImpl implements WebRoomService {
 
     @Value("${mixi.ticket.expire:60}")
     private Integer ticketExpire;
+    @Resource
+    NacosDiscoveryProperties nacosDiscoveryProperties;
+    NacosNamingService nacosNamingService = null;
+    @PostConstruct
+    public void init() throws NacosException {
+        nacosNamingService = new NacosNamingService(nacosDiscoveryProperties.getNacosProperties());
+    }
 
     @Override
     public Result<?> createRoom(CreateRoomDTO createRoomDTO) {
@@ -78,6 +91,16 @@ public class WebRoomServiceImpl implements WebRoomService {
 
         String roomLink = createTicket(roomId, uid);
         resultMap.put("link", roomLink);
+        try {
+            List<Instance> instances = nacosNamingService.getAllInstances("Mixi-nettyServer");
+            List<String> ipList = instances.stream()
+                    .map(Instance::getIp)
+                    .collect(Collectors.toList());
+            resultMap.put("wsURL",ipList.get(new Random().nextInt(ipList.size())));
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+
         return Result.success(resultMap);
     }
 
@@ -196,5 +219,13 @@ public class WebRoomServiceImpl implements WebRoomService {
         BeanUtil.copyProperties(webRoom, roomInfoVO);
         roomInfoVO.setCreateId((String) roomMap.get(OWNER));
         return Result.success(roomInfoVO);
+    }
+
+    @Override
+    public Result<?> getRoomAddress(String roomId) {
+
+
+
+        return Result.success();
     }
 }

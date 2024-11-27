@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSnackbarStore } from "@/stores/snackbarStore";
+import { useSnackbarStore } from "@/store/snackbarStore";
 const snackbarStore = useSnackbarStore();
 
 const getIcon = (type:string) => {

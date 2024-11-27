@@ -1,7 +1,7 @@
 /*
  * @Author: Dhx
  * @Date: 2024-07-05 15:32:16
- * @Description: 
+ * @Description:
  * @FilePath: \Mixi\Mixi-ui\vite.config.ts
  */
 import { fileURLToPath, URL } from 'node:url'
@@ -28,7 +28,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/mixiApi/gateway/': {
-        target: 'http://116.205.236.94:8080/',
+        target: 'http://123.249.107.238:8080/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/mixiApi\/gateway/,"/")
       },

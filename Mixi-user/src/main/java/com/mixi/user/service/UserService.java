@@ -16,5 +16,5 @@ public interface UserService{
 
     Result<?> getUserInfo(String userId);
 
-    R<String> visitorUserLogin(TouristLoginDTO touristLoginDTO);
+    Result<?> visitorUserLogin(TouristLoginDTO touristLoginDTO);
 }

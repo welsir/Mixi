@@ -65,7 +65,7 @@ class SocketProtocol {
                 return null
             }
             console.log(headerDataLength)
-            let str = bytes.readString(headerDataLength)
+            let str = bytes.readString(headerDataLength).replace(/(\w+)=/g, '"$1":')
             console.log(str)
             const header = JSON.parse(str)
             this.headers.push(header)

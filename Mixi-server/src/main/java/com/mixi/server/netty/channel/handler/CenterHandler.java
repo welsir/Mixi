@@ -36,7 +36,7 @@ public class CenterHandler implements ChannelHandler {
         }
         Set<String> rooms = attrs.getRooms();
         for (String room : rooms) {
-            RoomChannelManager.getRoomInfo(room).removeMembers(channel);
+            RoomChannelManager.getRoomInfo(room).deregisterUid(channel);
             RoomChannelManager.removeChannel(room,channel,false);
         }
     }

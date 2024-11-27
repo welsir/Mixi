@@ -1,6 +1,6 @@
 import type {Profile} from "@/api/user/userType";
 import {storage} from "@/util/storage";
-import {useAuthStore} from "@/stores/authStore";
+import {useAuthStore} from "@/store/authStore";
 import {loginApi, logoutApi} from "@/api/user/userApi";
 import config from "@/config/OAuthGithub";
 import GithubConfig from "@/config/OAuthGithub";

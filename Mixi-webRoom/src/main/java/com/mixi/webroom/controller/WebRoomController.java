@@ -79,4 +79,9 @@ public class WebRoomController {
     public Result<?> getRoomInfo() {
         return webRoomService.getRoomInfo();
     }
+
+    @PostMapping("/queryRoom")
+    public Result<?> queryRoomIfAbsent(@NotBlank String roomId){
+        return webRoomService.getRoomAddress(roomId);
+    }
 }

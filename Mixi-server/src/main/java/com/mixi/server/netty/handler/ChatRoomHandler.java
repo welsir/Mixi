@@ -21,6 +21,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.mixi.server.netty.protocol.AccessResponse.*;
 
@@ -33,7 +37,6 @@ import static com.mixi.server.netty.protocol.AccessResponse.*;
 public class ChatRoomHandler extends MixiAbstractHandler {
 
     private Logger log = LoggerFactory.getLogger(ChatRoomHandler.class);
-
     @Resource
     TimelineMessageManager timeline;
     @Resource
@@ -41,17 +44,18 @@ public class ChatRoomHandler extends MixiAbstractHandler {
     @Override
     protected Object doHandle(MixiNettyChannel channel, AccessMessage message) {
         String header = AccessMessageUtils.extractHeaderData(message, HeaderEnum.CHATROOM);
-        log.info(header);
         JSONObject jsonObject = JSON.parseObject(header);
         String roomId = jsonObject.getString(Constants.CHATROOM_ID);
         if(StringUtils.isBlank(roomId)){
-            return INVALID_ROOM_NAME;
+            return INVALID_ROOMID;
         }
         int cmd = jsonObject.getInteger(Constants.CHATROOM_CMD);
         if(CommandEnum.CHATROOM_JOIN.getCode() == cmd){
             return joinRoom(channel,message,jsonObject);
         }else if(CommandEnum.CHATROOM_SEND.getCode() == cmd){
             return sendRoomMessage(channel,message,jsonObject);
+        }else if(CommandEnum.CHATROOM_QUERY_MEMBERS.getCode()==cmd){
+            return queryRoomMembers(channel,roomId);
         }
         return null;
     }
@@ -117,5 +121,20 @@ public class ChatRoomHandler extends MixiAbstractHandler {
         timelineMessage.setFromId(channelId);
         timelineMessage.setRoomId(roomId);
         return timelineMessage;
+    }
+
+    private AccessResponse queryRoomMembers(MixiNettyChannel channel,String roomId){
+        Set<MixiNettyChannel> channels = RoomChannelManager.getRoomInfo(roomId).getChannels();
+        String uidList = channels.stream()
+                .map(c -> c.getAttrs().getUid())
+                .collect(Collectors.toList()).toString();
+        byte[] body = Map.of("members", uidList, "cmd", CommandEnum.CHATROOM_QUERY_MEMBERS.getCode()).toString().getBytes(StandardCharsets.UTF_8);
+        AccessMessage response = AccessMessageUtils.createResponse(new Header(HeaderEnum.CHATROOM.getType(), body),null,this.getMark());
+        channel.send(response);
+        log.info("在线成员名单："+uidList);
+        return SUCCESS;
+    }
+    private AccessResponse queryHistoryMsg(MixiNettyChannel channel,String roomId){
+        return null;
     }
 }

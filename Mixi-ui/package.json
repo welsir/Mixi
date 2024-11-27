@@ -15,16 +15,21 @@
   "dependencies": {
     "@icon-park/vue-next": "^1.4.2",
     "axios": "^1.7.2",
+    "fingerprintjs2": "^2.1.4",
     "naive-ui": "^2.39.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persist": "^1.0.0",
+    "remixicon": "^4.5.0",
     "unplugin-vue-router": "^0.10.0",
     "vue": "^3.4.29",
-    "vue-router": "^4.3.3"
+    "vue-advanced-chat": "^2.1.0",
+    "vue-router": "^4.3.3",
+    "vuetify": "^3.7.4"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
+    "@types/fingerprintjs2": "^2.0.0",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",

@@ -16,14 +16,14 @@ public class ChatroomMsg implements Serializable {
 
     private static final long serialVersionUID = 7718754664815537037L;
 
-    private Long roomId;
+    private String roomId;
     private Long fromUid;
     private String content;
     private String messageId;
 
     public static ChatroomMsg convertMsgToChatRoom(TimelineMessage message){
         ChatroomMsg chatroomMsg = new ChatroomMsg();
-        chatroomMsg.setRoomId(Long.valueOf(message.getRoomId()));
+        chatroomMsg.setRoomId(message.getRoomId());
         chatroomMsg.setContent(message.getContent());
         chatroomMsg.setFromUid(Long.valueOf(message.getFromId()));
         chatroomMsg.setMessageId(String.valueOf(message.getId()));

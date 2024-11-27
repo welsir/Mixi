@@ -14,7 +14,7 @@ import { onMounted,ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {linkVerifyApi} from '@/api/user/userApi'
 import { storage } from '@/util/storage';
-import {useAuthStore} from "@/stores/authStore";
+import {useAuthStore} from "@/store/authStore";
 
 let router = useRouter();
 let time = ref(0)

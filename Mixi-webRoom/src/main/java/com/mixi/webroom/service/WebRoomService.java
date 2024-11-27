@@ -26,4 +26,6 @@ public interface WebRoomService {
     Result<?> transferOwner(String newOwner);
 
     Result<?> getRoomInfo();
+
+    Result<?> getRoomAddress(String roomId);
 }

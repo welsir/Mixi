@@ -51,10 +51,6 @@ public class RoomChannelManager {
         public Integer generateMsgIdgenerateMsgId(){
             return msgCounter.incrementAndGet();
         }
-
-        public void removeMembers(MixiNettyChannel channel) {
-            channels.remove(channel);
-        }
     }
 
     public static boolean addChannel(String roomName, MixiNettyChannel channel, String uid) {

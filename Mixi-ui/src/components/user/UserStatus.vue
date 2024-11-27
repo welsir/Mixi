@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/store/authStore";
 import { getUserInfoApi } from '@/api/user/userApi'
 import { onMounted } from "vue";
 import { storage } from '@/util/storage';

@@ -7,8 +7,41 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import router from "@/router/index";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/store/authStore";
 import UserStatus from '@/components/user/UserStatus.vue'
+import Login from "@/views/demo/Login.vue";
+import presetUna from '@una-ui/preset'
+import prefixes from '@una-ui/preset/prefixes'
+import extratorUna from '@una-ui/extractor-vue-script'
+import {
+  presetAttributify,
+  presetIcons,
+  presetUno,
+  transformerDirectives,
+  transformerVariantGroup,
+} from 'unocss'
+const loginButton = ref(false);
+ const presets = [
+  presetUno(),
+  presetAttributify(),
+  presetIcons({
+    scale: 1.2,
+    extraProperties: {
+      'display': 'inline-block',
+      'vertical-align': 'middle',
+    },
+  }),
+  presetUna(),
+]
+   const extractors = [
+  extratorUna({
+    prefixes,
+  }),
+]
+    const transformers= [
+  transformerDirectives(),
+  transformerVariantGroup(),
+]
 </script>
 
 <template>
@@ -19,10 +52,12 @@ import UserStatus from '@/components/user/UserStatus.vue'
       <nav class="flex" @click="router.push('/price')">定价</nav>
       <nav class="flex" @click="router.push('/about')">关于我们</nav>
       <nav class="flex">
-        <button @click="router.push('/demo/Login')" v-if="!useAuthStore().getLoginState" class="M-btn">登录/注册</button>
-
+        <button @click="loginButton = true" v-if="!useAuthStore().getLoginState" class="M-btn">登录/注册</button>
         <UserStatus v-else></UserStatus>
       </nav>
+    </div>
+    <div v-show="loginButton" class="loginForm">
+      <Login></Login>
     </div>
   </header>
 </template>
@@ -69,5 +104,16 @@ header {
     }
   }
 }
-
+.loginForm{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 </style>

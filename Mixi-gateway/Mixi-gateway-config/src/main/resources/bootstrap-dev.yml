@@ -1,12 +1,12 @@
 spring:
   cloud:
     nacos:
-      server-addr: ENC(i3qo2y25Hbjddhzf48Z/suQY3yqEuL2CcZJxf+6oalaJ/VvYNUXLPw==)
+      server-addr: ENC(jzjMSx3gUCR7vKLVMJ5fvqy8Gcfz8Nxan5ou8JeD3fC209f1qNA+gQ==)
       username: ENC(nF6dMgeUkKVZFapN4YBt7W7blo/wthUx)
-      password: ENC(zqDMrrhfrRY2dI495lb+/J8DHwDIm9yPzUEuB7a7UQVCBOY/6bFl4Q==)
+      password: ENC(X9SY/CPDBR946egBuu8lXsXv/lHEWmE8R3lDYGE539I=)
       namespace: 32281a6b-5578-4c51-a2e7-1c65eba79860
       discovery:
-        namespace: 32281a6b-5578-4c51-a2e7-1c65eba79860
+        namespace: b21e6a4b-33d1-44c3-9b24-8a682c897292
     gateway:
       supportModules: webroom,user,admin
       routes:

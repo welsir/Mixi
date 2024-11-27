@@ -2,14 +2,21 @@ import { defineStore } from "pinia";
 
 import router from "../router";
 import {storage} from "@/util/storage";
-import type {Profile} from "@/api/user/userType";
-import { getUserInfoApi } from "@/api/user/userApi";
+interface Profile {
+  username: string;
+  email: string;
+  password: string;
+  avatar: string;
+  nickname: string;
+  sex: string;
+  resume: string;
+}
 
-export const useAuthStore = defineStore({
-  id: "auth",
+export const useAuthStore = defineStore("auth",{
   state: () => ({
     isLoggedIn: false, // 登录状态
     profile: null as Profile | null,
+    user: null,
   }),
 
   getters: {

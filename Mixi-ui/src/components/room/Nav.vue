@@ -3,19 +3,6 @@
     <div class="own-pic">
       <HeadPortrait :imgUrl="imgUrl"></HeadPortrait>
     </div>
-    <div class="nav-menu-wrapper">
-      <ul class="menu-list">
-        <li
-          v-for="(item, index) in menuList"
-          :key="index"
-          :class="{ activeNav: index === current }"
-          @click="changeMenu(index)"
-        >
-          <div class="block"></div>
-          <span class="iconfont" :class="item"></span>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -28,15 +15,8 @@ export default {
   },
   data() {
     return {
-      menuList: [
-        "icon-xinxi",
-        "icon-shipin",
-        "icon-shu",
-        "icon-shandian",
-        "icon-shezhi",
-      ],
       current: 0,
-      imgUrl: "../../../public/img/head_portrait.jpg"
+      imgUrl: "../../public/img/head_portrait.jpg"
     };
   },
   methods: {

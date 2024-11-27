@@ -13,6 +13,7 @@ const HEADER_TYPE_CHATROOM = 0X02
 const HEADER_TYPE_AUTH = 0X03
 const HEADER_CMD_JOIN = 0x0a
 const HEADER_CMD_MESSAGE = 0x0c
+const HEADER_CMD_QUERY_MEMBERS = 0x0e
 
 function heartBeatMessage() {
     return new SocketProtocol(VERSION_1,true,CMD_1,[],"").encodeMessage()!
@@ -55,7 +56,19 @@ function queryHistoryMessage(msg:{roomId:number}){
     }
     return new SocketProtocol(VERSION_1,false,CMD_1,[],"").encodeMessage();
 }
+function queryOnlineMembers(msg:{roomId:number}){
+    const header:SocketHeader = {
+        type: HEADER_TYPE_CHATROOM,
+        data: JSON.stringify({
+            room:msg.roomId,
+            cmd:HEADER_CMD_QUERY_MEMBERS.toString()
+        })
+    }
+    return new SocketProtocol(VERSION_1,false,CMD_1,[header],"").encodeMessage();
+}
 function decodeRemoteMessage(bytes:Bytes){
     return new SocketProtocol(VERSION_1,false,CMD_1,[],"").decodeMessage(bytes)
 }
-export {heartBeatMessage,joinRoomMessage,chatMessage,decodeRemoteMessage,queryHistoryMessage}
+
+
+export {heartBeatMessage,joinRoomMessage,chatMessage,decodeRemoteMessage,queryHistoryMessage,queryOnlineMembers}

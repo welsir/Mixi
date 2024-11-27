@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useSnackbarStore } from "@/stores/snackbarStore";
+import { useSnackbarStore } from "@/store/snackbarStore";
 import { statusTextMap,errorStatusCodes,ignoreStatusCodes } from '@/util/statusCodes'
 import { storage } from "./storage";
 const request = axios.create({
-  baseURL: "http://116.205.236.94:8080",
+  // baseURL: "http://123.249.107.238:8080",
+    baseURL: "http://localhost:9010",
   // baseURL: "/api",
   timeout: 10000,
 });

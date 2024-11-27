@@ -8,6 +8,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 import HomeView from "@/views/HomeView.vue";
 import CreatRoom from "@/views/CreatRoom.vue";
+import Members from "@/views/Members.vue";
+import MainLayout from "@/views/chat/chatHome.vue";
 
 const customRoutes = [
   {
@@ -15,9 +17,14 @@ const customRoutes = [
     name: 'Home',
     component: HomeView
   },{
-    path: '/CreatRoom',
-    name: 'createRoom',
-    Component: CreatRoom
+    path: '/about',
+    name: 'membersAbout',
+    Component: Members
+  },{
+    path: '/demo/MainLayout',
+    name: 'chat',
+    component: MainLayout,
+    props: true,
   }
 ];
 

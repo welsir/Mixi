@@ -8,19 +8,23 @@ spring:
     password: ${MYSQL_PASSWORD:ENC(s46BLckvILKia876w8vukdzL/UCMD3/CqedOUStw55dOQLmjHpoeEQ==)}
   cloud:
     nacos:
-      server-addr: ENC(i3qo2y25Hbjddhzf48Z/suQY3yqEuL2CcZJxf+6oalaJ/VvYNUXLPw==)
+      server-addr: ENC(/hmK8b3NLF5b2wa20x/9/M6fh6Ry+fDyP36hIjU1Gw5T2FvlYP0ZBg==)
       username: ENC(nF6dMgeUkKVZFapN4YBt7W7blo/wthUx)
-      password: ENC(zqDMrrhfrRY2dI495lb+/J8DHwDIm9yPzUEuB7a7UQVCBOY/6bFl4Q==)
+      password: ENC(X9SY/CPDBR946egBuu8lXsXv/lHEWmE8R3lDYGE539I=)
       namespace: 32281a6b-5578-4c51-a2e7-1c65eba79860
       discovery:
-        namespace: 32281a6b-5578-4c51-a2e7-1c65eba79860
+        namespace: b21e6a4b-33d1-44c3-9b24-8a682c897292
       config:
-        namespace: 32281a6b-5578-4c51-a2e7-1c65eba79860
+        namespace: b21e6a4b-33d1-44c3-9b24-8a682c897292
   redis:
-    host: ${REDIS_HOST:ENC(DoATKT3H6aEIGPC0FL69KkjLvrJKnw9q/oQ9kPs5Vt4=)}
+    host: ${REDIS_HOST:ENC(CYSeINCgW1v+0H0TIyGx2nj7cG6F8OG0sp9M481P9PY=)}
     port: 6379
     database: 10
-    password: ${REDIS_PASSWORD:ENC(3SF9cUbQq5wcQbZF42lbEm6RH9zB6Y5sGZIoUymT+exjpy1oFbGb0A==)}
+    password: ${REDIS_PASSWORD:ENC(UfTTwtjZePaRqY8sq4P7hNYiPj/xIN6GPu9Z5TkOV0Q=)}
 
 mixi:
   verifyLinkUrl: ${VERIFY_LINK:ENC(TSJqSXcliRzeuAglhUhXoXKKFZ5h2Xg22QdG6k2i/fAhQUOwGBpsEykeT/SJUTSYW8Xko2Kda+SIMa8O4u4XFQ==)}
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    password: genius_serve_0704

@@ -3,30 +3,30 @@
     <div class="botoom">
       <div class="chat-content" ref="chatContent">
         <div class="chat-wrapper" v-for="item in chatList" :key="item.id">
-          <div class="chat-another" v-if="item.uid !== '1001'">
+          <div class="chat-another" v-if="item.fromUid !== props.uid">
             <div class="chat-text">
-              {{ item.msg }}
+              {{ item.content }}
             </div>
             <div class="info-time">
-              <img :src="item.headImg" alt="" />
+              <img :src="bindImgToSender(item.fromUid)" alt="" />
               <span>{{ item.name }}</span>
               <span>{{ item.time }}</span>
             </div>
           </div>
           <div class="chat-me" v-else>
             <div class="chat-text">
-              {{ item.msg }}
+              {{ item.content }}
             </div>
             <div class="info-time">
               <span>{{ item.name }}</span>
               <span>{{ item.time }}</span>
-              <img :src="item.headImg" alt="" />
+              <img :src="bindImgToSender(item.fromUid)" alt="" />
             </div>
           </div>
         </div>
       </div>
       <div class="chatInputs">
-        <input class="inputs" v-model="inputMsg" @keyup.enter="sendText" />
+        <input class="inputs" v-model="inputMsg" @keyup.enter="sendMessage" />
         <div class="send boxinput" @click="sendMessage">
           <img src="../../../public/img/emoji/rocket.png" alt="" />
         </div>
@@ -37,39 +37,42 @@
 
 <script lang="ts" setup>
 import {animation} from "@/util/util";
-import {joinRoomMessage,chatMessage,decodeRemoteMessage, heartBeatMessage,queryHistoryMessage} from '@/util/socketMessage'
+import {chatMessage,decodeRemoteMessage, heartBeatMessage} from '@/util/socketMessage'
 
 import MixiWebSocket from "@/util/webSocket";
 import {storage} from "@/util/storage";
 import Bytes from "@/util/byteUtil";
-import { ref } from 'vue';
+import { ref,nextTick } from 'vue';
+import {chatStore} from "@/store/chatStore";
 
 
 const props = defineProps<{
   roomId: string;
   uid: string;
+  members: {
+    img: string;
+    headImg: string;
+    name: string;
+    lastMsg: string;
+    detail: string;
+    id: string;
+  }[];
 }>()
-const uid = Math.ceil(Math.random()*100000)
-const socket = new MixiWebSocket('ws://localhost:8090/chat');
-socket.init();
+const store = chatStore();
+const socket = store.createWsIfAbsent();
 socket.onopen(() => {
-  storage.set('uid',uid)
-  queryHistoryMessage({roomId: props.roomId}).then((res) => {
-    chatList.value = res;
-    scrollBottom();
-  });
-  socket.send(joinRoomMessage({roomId: props.roomId, uid: props.uid}))
+  storage.set('uid',props.uid)
   setInterval(()=>{
     socket.send(heartBeatMessage())
   },5000)
 });
-const chatList = ref<any[]>();
+const chatList = ref<any[]>([]);
 socket.onmessage((event: any) => {
   let data:Blob = event.data
   data.text().then((res:any)=>{
     let msg:any = decodeRemoteMessage(new Bytes(res))
     if(msg.body.code == 200||(msg.body==""||msg.headers.length==0))return
-    chatList.value.push(msg)
+    chatList.value.push(msg.body)
   })
 })
 const inputMsg = ref("");
@@ -80,13 +83,18 @@ const sendMessage = () => {
 }
 
 function scrollBottom() {
-  this.$nextTick(() => {
+  nextTick(() => {
     const scrollDom = document.getElementById("chatContent"); // 假设你给 chatContent 加了 id
     if (scrollDom) {
       animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
     }
   });
-};
+}
+
+function bindImgToSender(uid: String){
+  const member = props.members.find(m => m.id==(uid));
+  return member ? member.headImg : '';
+}
 </script>
 
 <style lang="scss" scoped>

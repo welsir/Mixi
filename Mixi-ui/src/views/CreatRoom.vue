@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/store/authStore";
 import { createApi,joinApi } from "@/api/room/roomApi";
 import type { Parameter } from '@/api/room/roomType'
 import router from "@/router";

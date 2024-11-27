@@ -18,6 +18,6 @@ export type LinkVerifyForm = {
 }
 export type VisitorLoginForm = {
     fingerprint:string;
-    picId:string;
-    picCode:string;
+    // picId:string;
+    // picCode:string;
 }

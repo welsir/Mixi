@@ -11,7 +11,6 @@ import com.mixi.server.netty.codec.ServerMessageWebSocketEncoder;
 import com.mixi.server.netty.protocol.AccessMessage;
 import com.mixi.server.netty.protocol.AccessResponse;
 import com.mixi.server.netty.protocol.ChatroomMsg;
-import com.mixi.server.utils.VarInt;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

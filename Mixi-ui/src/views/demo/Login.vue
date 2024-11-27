@@ -51,7 +51,7 @@ import '../../assets/css/additional.css';
 import '../../assets/css/normalize.css';
 import '../../assets/css/style.css';
 
-let loginMethod = ref(0)
+let loginMethod = ref(1)
 let loginForm = ref<LinkLoginForm>({
     email: '',
     picId: '',
@@ -67,7 +67,6 @@ const getPicId = (picId: string) => {
 }
 const loginFunc = (event) => {
     event.preventDefault();
-
     if (loginMethod.value == 0) {
         linkLoginApi(loginForm.value).then((res: any) => {
             if (res.code == 200) {

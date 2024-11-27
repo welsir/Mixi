@@ -1,5 +1,5 @@
 import request from "@/util/request";
-import {useAuthStore} from "@/stores/authStore";
+import {useAuthStore} from "@/store/authStore";
 import type {Profile,VisitorLoginForm,LinkLoginForm, LinkVerifyForm} from "@/api/user/userType";
 
 export function loginApi(form: Profile) {
@@ -43,3 +43,36 @@ export function visitorLoginApi(form:VisitorLoginForm){
         data:form
     })
 }
+
+export function sendPicCaptcha(){
+    return request.post('/api/user/code/pic')
+}
+
+
+export function emailLogin(loginForm){
+    return request.post('/user/login',loginForm)
+}
+
+export function emailRegister(registerForm){
+    return request.post('/user/register',registerForm)
+}
+
+export function sendCodeToEmail(email: string,pid: string,code: string){
+    return request({
+        url: '/user/sendCaptcha',
+        method:"post",
+        params:{
+            email: email,
+            pid: pid,
+            code: code
+        }
+    })
+}
+
+export function getUserInfo(){
+    return request({
+        url: '/user/getInfo',
+        method:"get",
+    })
+}
+

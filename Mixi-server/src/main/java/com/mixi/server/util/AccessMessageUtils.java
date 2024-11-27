@@ -54,4 +54,13 @@ public class AccessMessageUtils {
         response.setVersion(1);
         return response;
     }
+
+    public static AccessMessage createResponse(Header header,byte[] body,int cmd){
+        AccessMessage response = new AccessMessage();
+        response.setCmd(cmd);
+        response.setBody(body);
+        response.setVersion(1);
+        response.setHeaders(List.of(header));
+        return response;
+    }
 }

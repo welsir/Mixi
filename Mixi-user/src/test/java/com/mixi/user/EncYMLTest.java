@@ -18,5 +18,8 @@ public class EncYMLTest {
 
     @Test
     public void getPass() {
+        System.out.println(encryptor.decrypt("i3qo2y25Hbjddhzf48Z/suQY3yqEuL2CcZJxf+6oalaJ/VvYNUXLPw=="));
+        System.out.println(encryptor.encrypt("123.249.107.238:8848"));
+        System.out.println(encryptor.encrypt("welSuper@"));
     }
 }
